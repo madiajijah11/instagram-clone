@@ -44,8 +44,7 @@ function useSignUpWithEmailAndPassword() {
       );
 
       if (!newUser && error) {
-        showToast("Error", error.message, "error");
-        return;
+        return showToast("Error", error.message, "error");
       }
 
       if (newUser) {
