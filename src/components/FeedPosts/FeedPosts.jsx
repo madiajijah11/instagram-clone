@@ -23,7 +23,12 @@ function FeedPosts() {
     <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&
         [...Array(4)].map((_, index) => (
-          <VStack key={index} alignItems={"flex-start"} gap={4} mb={10}>
+          <VStack
+            key={`skeleton-${index}`}
+            alignItems={"flex-start"}
+            gap={4}
+            mb={10}
+          >
             <Flex gap={2}>
               <SkeletonCircle size={10} />
               <VStack gap={2} alignItems={"flex-start"}>

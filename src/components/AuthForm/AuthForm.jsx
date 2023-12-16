@@ -1,26 +1,11 @@
 import { Box, VStack, Image, Flex, Text } from "@chakra-ui/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import GoogleAuth from "./GoogleAuth";
 
 function AuthForm() {
-  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const handleAuth = () => {
-    if (!inputs.email || !inputs.password) {
-      alert("Please enter all fields");
-      return;
-    }
-
-    navigate("/");
-  };
   return (
     <>
       <Box border={"1px solid gray"} borderRadius={4} padding={5}>

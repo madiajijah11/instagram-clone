@@ -78,7 +78,7 @@ function Sidebar() {
           {sidebarItems.map((item, index) => (
             <Tooltip
               hasArrow
-              key={index}
+              key={`link-${index}`}
               label={item.text}
               placement="right"
               ml={1}

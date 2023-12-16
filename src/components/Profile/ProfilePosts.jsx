@@ -22,7 +22,7 @@ function ProfilePosts() {
     >
       {isLoading &&
         [...Array(6)].map((_, index) => (
-          <VStack key={index} alignItems={"flex-start"} gap={4}>
+          <VStack key={`skeleton-${index}`} alignItems={"flex-start"} gap={4}>
             <Skeleton w={"full"}>
               <Box h={"300px"}>content wrapped</Box>
             </Skeleton>
