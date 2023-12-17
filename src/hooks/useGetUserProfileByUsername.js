@@ -24,9 +24,9 @@ function useGetUserProfileByUsername(username) {
         }
 
         let userDoc;
-        for (const doc of querySnapshot) {
+        querySnapshot.docs.forEach((doc) => {
           userDoc = doc.data();
-        }
+        });
 
         setUserProfile(userDoc);
       } catch (error) {

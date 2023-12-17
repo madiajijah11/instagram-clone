@@ -11,6 +11,7 @@ import {
 import useUserProfileStore from "../../store/userProfileStore";
 import useAuthStore from "../../store/authStore";
 import EditProfile from "./EditProfile";
+import useFollowUser from "../../hooks/useFollowUser";
 
 function ProfileHeader() {
   const { userProfile } = useUserProfileStore();
@@ -20,6 +21,9 @@ function ProfileHeader() {
   const visitingAnotherProfileAndAuth =
     authUser && authUser.username !== userProfile.username;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(
+    userProfile.uid
+  );
 
   return (
     <Flex
@@ -66,8 +70,10 @@ function ProfileHeader() {
                 color={"white"}
                 _hover={{ bg: "blue.600" }}
                 size={{ base: "xs", md: "sm" }}
+                onClick={handleFollowUser}
+                isLoading={isUpdating}
               >
-                Follow
+                {isFollowing ? "Unfollow" : "Follow"}
               </Button>
             </Flex>
           )}
