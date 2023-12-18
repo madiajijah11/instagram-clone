@@ -12,7 +12,7 @@ import useShowToast from "./useShowToast";
 import useAuthStore from "../store/authStore";
 
 function useSignUpWithEmailAndPassword() {
-  const [createUserWithEmailAndPassword, _user, loading, error] =
+  const [createUserWithEmailAndPassword, , loading, error] =
     useCreateUserWithEmailAndPassword(auth);
   const showToast = useShowToast();
   const loginUser = useAuthStore((state) => state.login);

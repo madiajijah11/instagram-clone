@@ -6,7 +6,7 @@ import useAuthStore from "../store/authStore";
 
 const useLogin = () => {
   const showToast = useShowToast();
-  const [signInWithEmailAndPassword, _user, loading, error] =
+  const [signInWithEmailAndPassword, , loading, error] =
     useSignInWithEmailAndPassword(auth);
   const loginUser = useAuthStore((state) => state.login);
 
