@@ -6,7 +6,7 @@ import useLogout from "../../hooks/useLogout";
 import SidebarItems from "./SidebarItems";
 
 function Sidebar() {
-  const { _error, handleLogout, isLoggingOut } = useLogout();
+  const { handleLogout, isLoggingOut } = useLogout();
 
   return (
     <Box
