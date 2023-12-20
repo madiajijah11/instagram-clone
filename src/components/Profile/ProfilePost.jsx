@@ -1,18 +1,18 @@
 import {
-  GridItem,
-  Flex,
-  Text,
-  Image,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
-  Button,
   Avatar,
+  Button,
   Divider,
+  Flex,
+  GridItem,
+  Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  Text,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
@@ -22,18 +22,19 @@ import PostFooter from "../FeedPosts/PostFooter";
 import useUserProfileStore from "../../store/userProfileStore";
 import useAuthStore from "../../store/authStore";
 import useShowToast from "../../hooks/useShowToast";
-import usePostStore from "../../store/postStore";
+import { useState } from "react";
 import { deleteObject, ref } from "firebase/storage";
 import { firestore, storage } from "../../firebase/firebase";
 import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { useState } from "react";
+import usePostStore from "../../store/postStore";
+import { timeAgo } from "../../utils/timeAgo";
 
 function ProfilePost({ post }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const userProfile = useUserProfileStore((state) => state.userProfile);
   const authUser = useAuthStore((state) => state.user);
-  const [isDeleting, setIsDeleting] = useState(false);
   const showToast = useShowToast();
+  const [isDeleting, setIsDeleting] = useState(false);
   const deletePost = usePostStore((state) => state.deletePost);
   const decrementPostsCount = useUserProfileStore((state) => state.deletePost);
 
@@ -61,6 +62,8 @@ function ProfilePost({ post }) {
       setIsDeleting(false);
     }
   };
+
+  const noComments = post.comments.length !== 0;
 
   return (
     <>
@@ -156,6 +159,9 @@ function ProfilePost({ post }) {
                       {userProfile.username}
                     </Text>
                     <Text fontSize={"12"}>{post.caption}</Text>
+                    <Text fontSize={"12"} color={"gray"}>
+                      {timeAgo(post.createdAt)}
+                    </Text>
                   </Flex>
 
                   {authUser?.uid === userProfile.uid && (
@@ -172,6 +178,7 @@ function ProfilePost({ post }) {
                     </Button>
                   )}
                 </Flex>
+
                 <Divider my={4} bg={"gray.500"} />
                 <VStack
                   w={"full"}
@@ -179,17 +186,12 @@ function ProfilePost({ post }) {
                   maxH={"350px"}
                   overflowY={"auto"}
                 >
-                  <Comment
-                    createdAt={"1d ago"}
-                    username={"dian.rhmdni"}
-                    profilePic={"/profilepic.png"}
-                    text={
-                      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum."
-                    }
-                  />
+                  {post.comments.map((comment) => (
+                    <Comment key={comment.id} comment={comment} />
+                  ))}
                 </VStack>
-                <Divider my={4} bg={"gray.500"} />
-                <PostFooter />
+                {noComments && <Divider my={4} bg={"gray.500"} />}
+                <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>
           </ModalBody>

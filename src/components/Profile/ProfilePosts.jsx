@@ -4,7 +4,6 @@ import useGetUserPosts from "../../hooks/useGetUserPosts";
 
 function ProfilePosts() {
   const { isLoading, posts } = useGetUserPosts();
-
   const userHasNoPosts = !isLoading && posts.length === 0;
 
   if (userHasNoPosts) return <NoPostsFound />;
