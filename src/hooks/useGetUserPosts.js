@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
+import usePostStore from "../store/postStore";
 import useShowToast from "./useShowToast";
 import useUserProfileStore from "../store/userProfileStore";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
-function useGetUserPosts() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [posts, setPosts] = useState([]);
+const useGetUserPosts = () => {
+  /**
+   * Fetches posts from a Firestore database based on the user's profile.
+   * @returns {Object} An object containing the isLoading variable and the posts array.
+   */
+  const [isLoading, setIsLoading] = useState(true);
+  const { posts, setPosts } = usePostStore();
   const showToast = useShowToast();
   const userProfile = useUserProfileStore((state) => state.userProfile);
 
@@ -37,10 +42,11 @@ function useGetUserPosts() {
         setIsLoading(false);
       }
     };
+
     getPosts();
-  }, [userProfile, showToast, setPosts]);
+  }, [setPosts, userProfile, showToast]);
 
   return { isLoading, posts };
-}
+};
 
 export default useGetUserPosts;

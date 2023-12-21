@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { mountStoreDevtool } from "simple-zustand-devtools";
 
 const useUserProfileStore = create((set) => ({
   userProfile: null,
@@ -9,14 +10,18 @@ const useUserProfileStore = create((set) => ({
         posts: [post.id, ...state.userProfile.posts],
       },
     })),
-  deletePost: (id) =>
+  deletePost: (postId) =>
     set((state) => ({
       userProfile: {
         ...state.userProfile,
-        posts: state.userProfile.posts.filter((postId) => postId !== id),
+        posts: state.userProfile.posts.filter((id) => id !== postId),
       },
     })),
   setUserProfile: (userProfile) => set({ userProfile }),
 }));
+
+if (process.env.NODE_ENV === "development") {
+  mountStoreDevtool("useUserProfileStore", useUserProfileStore);
+}
 
 export default useUserProfileStore;

@@ -9,7 +9,6 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import useGetFeedPosts from "../../hooks/useGetFeedPosts";
 
 function FeedPosts() {
@@ -42,12 +41,10 @@ function FeedPosts() {
         posts.map((post) => <FeedPost key={post.id} post={post} />)}
 
       {!isLoading && posts.length === 0 && (
-        <>
-          <Text fontSize={"md"} color={"red.400"} fontWeight={"bold"}>
-            Looks like you are not following anyone. Follow people to see their
-            posts.
-          </Text>
-        </>
+        <Text fontSize={"md"} color={"red.400"} fontWeight={"bold"}>
+          Looks like you are not following anyone. Follow people to see their
+          posts.
+        </Text>
       )}
     </Container>
   );

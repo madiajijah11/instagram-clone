@@ -1,10 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import useShowToast from "./useShowToast";
-import useUserProfileStore from "../store/userProfileStore";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
+import useUserProfileStore from "../store/userProfileStore";
 
-function useGetUserProfileByUsername(username) {
+const useGetUserProfileByUsername = (username) => {
+  /**
+   * Fetches a user profile from a Firestore database based on a given username.
+   * @param {string} username - The username for which to fetch the user profile.
+   * @returns {object} - An object containing the isLoading flag and the userProfile data.
+   */
   const [isLoading, setIsLoading] = useState(true);
   const showToast = useShowToast();
   const { userProfile, setUserProfile } = useUserProfileStore();
@@ -18,13 +23,10 @@ function useGetUserProfileByUsername(username) {
           where("username", "==", username)
         );
         const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) {
-          return setUserProfile(null);
-        }
+        if (querySnapshot.empty) return setUserProfile(null);
 
         let userDoc;
-        querySnapshot.docs.forEach((doc) => {
+        querySnapshot.forEach((doc) => {
           userDoc = doc.data();
         });
 
@@ -37,9 +39,9 @@ function useGetUserProfileByUsername(username) {
     };
 
     getUserProfile();
-  }, [setUserProfile, showToast, username]);
+  }, [setUserProfile, username, showToast]);
 
   return { isLoading, userProfile };
-}
+};
 
 export default useGetUserProfileByUsername;

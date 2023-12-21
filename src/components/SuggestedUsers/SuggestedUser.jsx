@@ -4,7 +4,7 @@ import useAuthStore from "../../store/authStore";
 import { Link } from "react-router-dom";
 
 function SuggestedUser({ user, setUser }) {
-  const { isFollowing, handleFollowUser, isUpdating } = useFollowUser(user.uid);
+  const { isFollowing, isUpdating, handleFollowUser } = useFollowUser(user.uid);
   const authUser = useAuthStore((state) => state.user);
 
   const onFollowUser = async () => {
@@ -24,9 +24,11 @@ function SuggestedUser({ user, setUser }) {
           <Avatar src={user.profilePicURL} name={user.fullName} size={"md"} />
         </Link>
         <VStack spacing={2} alignItems={"flex-start"}>
-          <Box fontSize={12} fontWeight={"bold"}>
-            {user.fullName}
-          </Box>
+          <Link to={`/${user.username}`}>
+            <Box fontSize={12} fontWeight={"bold"}>
+              {user.fullName}
+            </Box>
+          </Link>
           <Box fontSize={11} color={"gray.500"}>
             {user.followers.length} followers
           </Box>

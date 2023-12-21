@@ -6,6 +6,17 @@ import { firestore } from "../firebase/firebase";
 import usePostStore from "../store/postStore";
 
 const usePostComment = () => {
+  /**
+   * Custom hook that handles posting comments on a post.
+   * It checks if the user is logged in, adds the comment to the Firestore database, and updates the local state with the new comment.
+   *
+   * @returns {Object} An object containing the `isCommenting` variable and the `handlePostComment` function.
+   *
+   * @example
+   * const { isCommenting, handlePostComment } = usePostComment();
+   * // Call handlePostComment with the post ID and comment text to post a comment
+   * handlePostComment(postId, comment);
+   */
   const [isCommenting, setIsCommenting] = useState(false);
   const showToast = useShowToast();
   const authUser = useAuthStore((state) => state.user);

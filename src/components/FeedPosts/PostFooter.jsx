@@ -6,6 +6,7 @@ import {
   InputRightElement,
   Button,
   Input,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import {
@@ -16,13 +17,15 @@ import {
 import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import useLikePost from "../../hooks/useLikePost";
+import CommentsModal from "../Comment/CommentsModal";
 
 function PostFooter({ post, creatorProfile, isProfilePage }) {
-  const { handlePostComment, isCommenting } = usePostComment();
-  const { handleLikePost, isLiked, likes } = useLikePost(post);
-  const authUser = useAuthStore((state) => state.user);
+  const { isCommenting, handlePostComment } = usePostComment();
   const [comment, setComment] = useState("");
+  const authUser = useAuthStore((state) => state.user);
   const commentRef = useRef(null);
+  const { handleLikePost, isLiked, likes } = useLikePost(post);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSubmitComment = async () => {
     await handlePostComment(post.id, comment);
@@ -57,10 +60,18 @@ function PostFooter({ post, creatorProfile, isProfilePage }) {
             </Text>
           </Text>
           {post.comments.length > 0 && (
-            <Text fontSize={"sm"} color={"gray"} cursor={"pointer"}>
+            <Text
+              fontSize={"sm"}
+              color={"gray"}
+              cursor={"pointer"}
+              onClick={onOpen}
+            >
               View all {post.comments.length} comments
             </Text>
           )}
+          {isOpen ? (
+            <CommentsModal isOpen={isOpen} onClose={onClose} post={post} />
+          ) : null}
         </>
       )}
 

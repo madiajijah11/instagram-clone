@@ -5,7 +5,15 @@ import useShowToast from "./useShowToast";
 import { firestore } from "../firebase/firebase";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
-function useFollowUser(userId) {
+/**
+ * A custom hook that handles the logic for following and unfollowing a user.
+ * @param {string} userId - The ID of the user that the authenticated user wants to follow/unfollow.
+ * @returns {object} - An object containing the following properties:
+ *   - isUpdating: A boolean value indicating whether the user is currently being updated.
+ *   - isFollowing: A boolean value indicating whether the authenticated user is currently following the target user.
+ *   - handleFollowUser: A function that handles the logic for following and unfollowing a user.
+ */
+const useFollowUser = (userId) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const authUser = useAuthStore((state) => state.user);
@@ -13,6 +21,9 @@ function useFollowUser(userId) {
   const { userProfile, setUserProfile } = useUserProfileStore();
   const showToast = useShowToast();
 
+  /**
+   * Handles the logic for following and unfollowing a user.
+   */
   const handleFollowUser = async () => {
     setIsUpdating(true);
     try {
@@ -44,7 +55,7 @@ function useFollowUser(userId) {
           });
         }
 
-        localStorage.setItem(
+        sessionStorage.setItem(
           "user-info",
           JSON.stringify({
             ...authUser,
@@ -65,7 +76,7 @@ function useFollowUser(userId) {
           });
         }
 
-        localStorage.setItem(
+        sessionStorage.setItem(
           "user-info",
           JSON.stringify({
             ...authUser,
@@ -90,5 +101,5 @@ function useFollowUser(userId) {
   }, [authUser, userId]);
 
   return { isUpdating, isFollowing, handleFollowUser };
-}
+};
 export default useFollowUser;

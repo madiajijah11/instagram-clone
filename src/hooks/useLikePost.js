@@ -4,7 +4,17 @@ import useShowToast from "./useShowToast";
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
-function useLikePost(post) {
+const useLikePost = (post) => {
+  /**
+   * Custom hook for handling the functionality of liking a post.
+   *
+   * @param {object} post - The post object containing the post ID and an array of user IDs who have liked the post.
+   * @returns {object} - An object containing state variables and functions related to liking a post.
+   * @property {boolean} isUpdating - Indicates whether the like operation is currently being updated.
+   * @property {boolean} isLiked - Indicates whether the post is liked by the authenticated user.
+   * @property {number} likes - The total number of likes for the post.
+   * @property {function} handleLikePost - A function that handles the like/unlike operation for the post.
+   */
   const [isUpdating, setIsUpdating] = useState(false);
   const authUser = useAuthStore((state) => state.user);
   const [likes, setLikes] = useState(post.likes.length);
@@ -35,6 +45,6 @@ function useLikePost(post) {
     }
   };
   return { isUpdating, isLiked, likes, handleLikePost };
-}
+};
 
 export default useLikePost;

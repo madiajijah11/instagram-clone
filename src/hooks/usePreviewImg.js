@@ -1,7 +1,11 @@
 import { useState } from "react";
 import useShowToast from "./useShowToast";
 
-function usePreviewImg() {
+const usePreviewImg = () => {
+  /**
+   * Custom hook to handle image preview functionality.
+   * @returns {Object} An object containing the selectedFile, handleImageChange, and setSelectedFile functions.
+   */
   const [selectedFile, setSelectedFile] = useState(null);
   const showToast = useShowToast();
   const maxFileSize = 2 * 1024 * 1024;
@@ -25,6 +29,6 @@ function usePreviewImg() {
     setSelectedFile(null);
   };
   return { selectedFile, handleImageChange, setSelectedFile };
-}
+};
 
 export default usePreviewImg;

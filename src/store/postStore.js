@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { mountStoreDevtool } from "simple-zustand-devtools";
 
 const usePostStore = create((set) => ({
   posts: [],
@@ -19,5 +20,9 @@ const usePostStore = create((set) => ({
       }),
     })),
 }));
+
+if (process.env.NODE_ENV === "development") {
+  mountStoreDevtool("usePostStore", usePostStore);
+}
 
 export default usePostStore;

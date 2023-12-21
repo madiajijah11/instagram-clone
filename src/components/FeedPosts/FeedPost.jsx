@@ -9,7 +9,7 @@ function FeedPost({ post }) {
     <>
       <PostHeader post={post} creatorProfile={userProfile} />
       <Box my={2} borderRadius={4} overflow={"hidden"}>
-        <Image src={post.imageURL} alt={[post.caption]} />
+        <Image src={post.imageURL} alt={post.caption} />
       </Box>
       <PostFooter post={post} creatorProfile={userProfile} />
     </>

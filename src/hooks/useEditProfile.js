@@ -6,7 +6,17 @@ import { doc, updateDoc } from "firebase/firestore";
 import { firestore, storage } from "../firebase/firebase";
 import useUserProfileStore from "../store/userProfileStore";
 
-function useEditProfile() {
+/**
+ * Custom hook for editing a user's profile.
+ *
+ * @returns {Object} Contains two properties:
+ * - `isUpdating`: A boolean indicating whether the profile is currently being updated.
+ * - `editProfile`: A function that takes two parameters:
+ *   - `inputs`: An object containing the new profile data. It should have `fullName`, `username`, and `bio` properties.
+ *   - `selectedFile`: A string representing the data URL of the selected profile picture file. If this parameter is provided, the profile picture will be updated.
+ *   This function updates the user's profile in Firestore, updates the user's profile in the local state, and shows a toast notification indicating whether the update was successful.
+ */
+const useEditProfile = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const showToast = useShowToast();
   const authUser = useAuthStore((state) => state.user);
@@ -46,6 +56,6 @@ function useEditProfile() {
     }
   };
   return { isUpdating, editProfile };
-}
+};
 
 export default useEditProfile;

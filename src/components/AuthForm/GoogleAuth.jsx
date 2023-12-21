@@ -23,7 +23,7 @@ function GoogleAuth({ prefix }) {
       if (userSnap.exists()) {
         // User already exists (Log In)
         const userDoc = userSnap.data();
-        localStorage.setItem("user-info", JSON.stringify(userDoc));
+        sessionStorage.setItem("user-info", JSON.stringify(userDoc));
         loginUser(userDoc);
       } else {
         // New user (Sign up)
@@ -40,7 +40,7 @@ function GoogleAuth({ prefix }) {
           createdAt: Date.now(),
         };
         await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
-        localStorage.setItem("user-info", JSON.stringify(userDoc));
+        sessionStorage.setItem("user-info", JSON.stringify(userDoc));
         loginUser(userDoc);
       }
     } catch (error) {

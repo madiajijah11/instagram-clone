@@ -12,7 +12,11 @@ const Comment = ({ comment }) => {
     <Flex gap={4}>
       {userProfile ? (
         <Link to={`/${userProfile.username}`}>
-          <Avatar src={userProfile.profilePicURL} size={"sm"} />
+          <Avatar
+            src={userProfile.profilePicURL}
+            size={"sm"}
+            name={userProfile.fullName}
+          />
         </Link>
       ) : (
         <SkeletonCircle size={10} />

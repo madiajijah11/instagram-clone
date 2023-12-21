@@ -4,6 +4,13 @@ import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
 const useGetUserProfileById = (userId) => {
+  /**
+   * Fetches a user profile from a Firestore database based on the given user ID.
+   * @param {string} userId - The ID of the user whose profile needs to be fetched.
+   * @returns {Object} An object containing the isLoading and userProfile states.
+   * - isLoading (boolean): Indicates whether the user profile data is currently being fetched (true) or not (false).
+   * - userProfile (object): The fetched user profile data, or null if the data is not available yet.
+   */
   const [isLoading, setIsLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
 

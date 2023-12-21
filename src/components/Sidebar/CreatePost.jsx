@@ -1,20 +1,20 @@
 import {
-  Tooltip,
   Box,
+  Button,
+  CloseButton,
   Flex,
+  Image,
+  Input,
   Modal,
-  ModalOverlay,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  ModalOverlay,
   Textarea,
-  Button,
-  Input,
+  Tooltip,
   useDisclosure,
-  Image,
-  CloseButton,
 } from "@chakra-ui/react";
 import { CreatePostLogo } from "../../assets/constants";
 import { BsFillImageFill } from "react-icons/bs";
@@ -23,7 +23,7 @@ import usePreviewImg from "../../hooks/usePreviewImg";
 import useShowToast from "../../hooks/useShowToast";
 import useAuthStore from "../../store/authStore";
 import usePostStore from "../../store/postStore";
-import useProfileStore from "../../store/userProfileStore";
+import useUserProfileStore from "../../store/userProfileStore";
 import { useLocation } from "react-router-dom";
 import {
   addDoc,
@@ -34,7 +34,6 @@ import {
 } from "firebase/firestore";
 import { firestore, storage } from "../../firebase/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import useUserProfileStore from "../../store/userProfileStore";
 
 const CreatePost = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -141,17 +140,17 @@ function useCreatePost() {
   const [isLoading, setIsLoading] = useState(false);
   const authUser = useAuthStore((state) => state.user);
   const createPost = usePostStore((state) => state.createPost);
-  const addPost = useProfileStore((state) => state.addPost);
+  const addPost = useUserProfileStore((state) => state.addPost);
   const userProfile = useUserProfileStore((state) => state.userProfile);
   const { pathname } = useLocation();
 
-  const handleCreatePost = async (caption, selectedFile) => {
+  const handleCreatePost = async (selectedFile, caption) => {
     if (isLoading) return;
-    if (!selectedFile)
-      return showToast("error", "Please select an image", "error");
+    if (!selectedFile) throw new Error("Please select an image");
     setIsLoading(true);
+
     const newPost = {
-      caption: caption,
+      caption,
       likes: [],
       comments: [],
       createdAt: Date.now(),
@@ -163,11 +162,8 @@ function useCreatePost() {
       const userDocRef = doc(firestore, "users", authUser.uid);
       const imageRef = ref(storage, `posts/${postDocRef.id}`);
 
-      await updateDoc(userDocRef, {
-        posts: arrayUnion(postDocRef.id),
-      });
+      await updateDoc(userDocRef, { posts: arrayUnion(postDocRef.id) });
       await uploadString(imageRef, selectedFile, "data_url");
-
       const downloadURL = await getDownloadURL(imageRef);
 
       await updateDoc(postDocRef, { imageURL: downloadURL });
@@ -187,5 +183,6 @@ function useCreatePost() {
       setIsLoading(false);
     }
   };
-  return { handleCreatePost, isLoading };
+
+  return { isLoading, handleCreatePost };
 }

@@ -188,7 +188,7 @@ function ProfilePost({ post }) {
                     <Comment key={comment.id} comment={comment} />
                   ))}
                 </VStack>
-                <Divider my={4} bg={"gray.500"} />
+                <Divider my={4} bg={"gray.8000"} />
                 <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>

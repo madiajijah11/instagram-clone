@@ -1,10 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "../store/authStore";
 import useShowToast from "./useShowToast";
-import { collection, getDocs, limit, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
-function useGetSuggestedUsers() {
+const useGetSuggestedUsers = () => {
+  /**
+   * Fetches a list of suggested users from a Firestore database.
+   * @returns {Object} An object containing isLoading and suggestedUsers.
+   * isLoading: A boolean indicating whether the data is currently being fetched.
+   * suggestedUsers: An array of user objects representing the suggested users.
+   */
   const [isLoading, setIsLoading] = useState(true);
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const authUser = useAuthStore((state) => state.user);
@@ -14,11 +27,12 @@ function useGetSuggestedUsers() {
     const getSuggestedUsers = async () => {
       setIsLoading(true);
       try {
-        const userRef = collection(firestore, "users");
+        const usersRef = collection(firestore, "users");
         const q = query(
-          userRef,
+          usersRef,
           where("uid", "not-in", [authUser.uid, ...authUser.following]),
-          limit(5)
+          orderBy("uid"),
+          limit(3)
         );
         const querySnapshot = await getDocs(q);
 
@@ -26,6 +40,7 @@ function useGetSuggestedUsers() {
         querySnapshot.forEach((doc) => {
           users.push({ ...doc.data(), id: doc.id });
         });
+
         setSuggestedUsers(users);
       } catch (error) {
         showToast("Error", error.message, "error");
@@ -38,6 +53,6 @@ function useGetSuggestedUsers() {
   }, [authUser, showToast]);
 
   return { isLoading, suggestedUsers };
-}
+};
 
 export default useGetSuggestedUsers;

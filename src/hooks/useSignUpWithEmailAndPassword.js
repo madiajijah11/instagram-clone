@@ -11,7 +11,23 @@ import {
 import useShowToast from "./useShowToast";
 import useAuthStore from "../store/authStore";
 
-function useSignUpWithEmailAndPassword() {
+const useSignUpWithEmailAndPassword = () => {
+  /**
+   * Custom hook for handling sign-up functionality for a user.
+   *
+   * @returns {Object} An object containing error, loading, and signup properties.
+   *
+   * @example
+   * const { error, loading, signup } = useSignUpWithEmailAndPassword();
+   *
+   * // Call the signup function with user inputs
+   * signup({
+   *   email: "example@example.com",
+   *   password: "password123",
+   *   username: "exampleUser",
+   *   fullName: "John Doe",
+   * });
+   */
   const [createUserWithEmailAndPassword, , loading, error] =
     useCreateUserWithEmailAndPassword(auth);
   const showToast = useShowToast();
@@ -61,7 +77,7 @@ function useSignUpWithEmailAndPassword() {
           createdAt: Date.now(),
         };
         await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
-        localStorage.setItem("user-info", JSON.stringify(userDoc));
+        sessionStorage.setItem("user-info", JSON.stringify(userDoc));
         loginUser(userDoc);
       }
     } catch (error) {
@@ -70,6 +86,6 @@ function useSignUpWithEmailAndPassword() {
   };
 
   return { error, loading, signup };
-}
+};
 
 export default useSignUpWithEmailAndPassword;
