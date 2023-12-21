@@ -25,7 +25,11 @@ function ProfileLink() {
         p={2}
         w={{ base: 10, md: "full" }}
       >
-        <Avatar size={"sm"} src={authUser?.profilePicURL || ""} />
+        <Avatar
+          size={"sm"}
+          src={authUser?.profilePicURL || ""}
+          name={authUser?.fullName}
+        />
         <Box display={{ base: "none", md: "block" }}>Profile</Box>
       </Link>
     </Tooltip>

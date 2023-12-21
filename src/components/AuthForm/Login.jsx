@@ -9,8 +9,10 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import useLogin from "../../hooks/useLogin";
+import useShowToast from "./../../hooks/useShowToast";
 
 function Login() {
+  const showToast = useShowToast();
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -54,6 +56,8 @@ function Login() {
           {error.message}
         </Alert>
       )}
+
+      {/* {error && showToast("Error", error.message, "error")} */}
 
       <Button
         w={"full"}

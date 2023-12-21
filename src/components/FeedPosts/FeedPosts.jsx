@@ -7,22 +7,18 @@ import {
   SkeletonCircle,
   Skeleton,
   Box,
+  Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import useGetFeedPosts from "../../hooks/useGetFeedPosts";
 
 function FeedPosts() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, []);
+  const { isLoading, posts } = useGetFeedPosts();
 
   return (
     <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&
-        [...Array(4)].map((_, index) => (
+        [...Array(3)].map((_, index) => (
           <VStack
             key={`skeleton-${index}`}
             alignItems={"flex-start"}
@@ -37,32 +33,20 @@ function FeedPosts() {
               </VStack>
             </Flex>
             <Skeleton w={"full"}>
-              <Box h={"500px"}>content wrapped</Box>
+              <Box h={"400px"}>content wrapped</Box>
             </Skeleton>
           </VStack>
         ))}
-      {!isLoading && (
+      {!isLoading &&
+        posts.length > 0 &&
+        posts.map((post) => <FeedPost key={post.id} post={post} />)}
+
+      {!isLoading && posts.length === 0 && (
         <>
-          <FeedPost
-            username={"dian.rhmdni"}
-            img={"./img1.png"}
-            avatar={"./img1.png"}
-          />
-          <FeedPost
-            username={"dian.rhmdni"}
-            img={"./img2.png"}
-            avatar={"./img2.png"}
-          />
-          <FeedPost
-            username={"dian.rhmdni"}
-            img={"./img3.png"}
-            avatar={"./img3.png"}
-          />
-          <FeedPost
-            username={"dian.rhmdni"}
-            img={"./img4.png"}
-            avatar={"./img4.png"}
-          />
+          <Text fontSize={"md"} color={"red.400"} fontWeight={"bold"}>
+            Looks like you are not following anyone. Follow people to see their
+            posts.
+          </Text>
         </>
       )}
     </Container>

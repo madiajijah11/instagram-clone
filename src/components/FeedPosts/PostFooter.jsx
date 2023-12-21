@@ -7,7 +7,7 @@ import {
   Button,
   Input,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   CommentLogo,
   NotificationsLogo,
@@ -15,36 +15,31 @@ import {
 } from "../../assets/constants";
 import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
+import useLikePost from "../../hooks/useLikePost";
 
-function PostFooter({ post, username, isProfilePage }) {
-  const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(0);
+function PostFooter({ post, creatorProfile, isProfilePage }) {
   const { handlePostComment, isCommenting } = usePostComment();
+  const { handleLikePost, isLiked, likes } = useLikePost(post);
   const authUser = useAuthStore((state) => state.user);
   const [comment, setComment] = useState("");
+  const commentRef = useRef(null);
 
   const handleSubmitComment = async () => {
     await handlePostComment(post.id, comment);
     setComment("");
   };
 
-  const handleLike = () => {
-    if (liked) {
-      setLiked(false);
-      setLikes(likes - 1);
-    } else {
-      setLiked(true);
-      setLikes(likes + 1);
-    }
-  };
-
   return (
     <Box mb={10} mt={"auto"}>
       <Flex alignItems={"center"} gap={4} w={"full"} pt={0} mb={2} mt={4}>
-        <Box onClick={handleLike} cursor={"pointer"} fontSize={18}>
-          {liked ? <UnlikeLogo /> : <NotificationsLogo />}
+        <Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
+          {isLiked ? <UnlikeLogo /> : <NotificationsLogo />}
         </Box>
-        <Box cursor={"pointer"} fontSize={18}>
+        <Box
+          cursor={"pointer"}
+          fontSize={18}
+          onClick={() => commentRef.current.focus()}
+        >
           <CommentLogo />
         </Box>
       </Flex>
@@ -53,17 +48,19 @@ function PostFooter({ post, username, isProfilePage }) {
         {likes} likes
       </Text>
 
-      {isProfilePage && (
+      {!isProfilePage && (
         <>
           <Text fontWeight={700} fontSize={"sm"}>
-            {username}{" "}
+            {creatorProfile?.username}{" "}
             <Text as={"span"} fontWeight={400}>
-              Feeling good
+              {post.caption}
             </Text>
           </Text>
-          <Text fontSize={"sm"} color={"gray"}>
-            View all 3 comments
-          </Text>
+          {post.comments.length > 0 && (
+            <Text fontSize={"sm"} color={"gray"} cursor={"pointer"}>
+              View all {post.comments.length} comments
+            </Text>
+          )}
         </>
       )}
 
@@ -81,6 +78,7 @@ function PostFooter({ post, username, isProfilePage }) {
               fontSize={14}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
+              ref={commentRef}
             />
             <InputRightElement>
               <Button

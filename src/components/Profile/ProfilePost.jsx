@@ -63,8 +63,6 @@ function ProfilePost({ post }) {
     }
   };
 
-  const noComments = post.comments.length !== 0;
-
   return (
     <>
       <GridItem
@@ -190,7 +188,7 @@ function ProfilePost({ post }) {
                     <Comment key={comment.id} comment={comment} />
                   ))}
                 </VStack>
-                {noComments && <Divider my={4} bg={"gray.500"} />}
+                <Divider my={4} bg={"gray.500"} />
                 <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>

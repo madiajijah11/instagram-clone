@@ -1,7 +1,20 @@
 import React from "react";
-import { Avatar, Flex, Text, Box } from "@chakra-ui/react";
+import {
+  Avatar,
+  Flex,
+  Box,
+  SkeletonCircle,
+  Skeleton,
+  Button,
+} from "@chakra-ui/react";
+import { timeAgo } from "./../../utils/timeAgo";
+import { Link } from "react-router-dom";
+import useFollowUser from "./../../hooks/useFollowUser";
 
-function PostHeader({ username, avatar }) {
+function PostHeader({ post, creatorProfile }) {
+  const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(
+    post.createdBy
+  );
   return (
     <Flex
       justifyContent={"space-between"}
@@ -10,21 +23,45 @@ function PostHeader({ username, avatar }) {
       my={2}
     >
       <Flex alignItems={"center"} gap={2}>
-        <Avatar src={avatar} size={"sm"} alt={username} />
+        {creatorProfile ? (
+          <Link to={`/${creatorProfile.username}`}>
+            <Avatar
+              name={creatorProfile.fullName}
+              src={creatorProfile.profilePicURL}
+              size={"sm"}
+              alt={creatorProfile.username}
+            />
+          </Link>
+        ) : (
+          <SkeletonCircle size={10} />
+        )}
         <Flex fontSize={12} fontWeight={"bold"} gap={2}>
-          {username} <Box color={"gray.500"}>1w</Box>
+          {creatorProfile ? (
+            <>
+              <Link to={`/${creatorProfile.username}`}>
+                {creatorProfile.username}{" "}
+              </Link>
+              <Box color={"gray.500"}>{timeAgo(post.createdAt)}</Box>
+            </>
+          ) : (
+            <Skeleton height={"10px"} w={"100px"} />
+          )}
         </Flex>
       </Flex>
       <Box cursor={"pointer"}>
-        <Text
+        <Button
+          size={"xs"}
+          bg={"transparent"}
           fontSize={12}
           fontWeight={"bold"}
           color={"blue.500"}
           _hover={{ color: "white" }}
           transition={"0.2s ease-in-out"}
+          isLoading={isUpdating}
+          onClick={handleFollowUser}
         >
-          Unfollow
-        </Text>
+          {isFollowing ? "Unfollow" : "Follow"}
+        </Button>
       </Box>
     </Flex>
   );
